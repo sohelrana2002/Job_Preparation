@@ -190,3 +190,139 @@ console.log(true + 1); // 2 (true coerced to 1)
 **উত্তর:** টাইপ কোয়েরশন হলো জাভাস্ক্রিপ্টে মানসমূহের এক ডেটা টাইপ থেকে অন্য ডেটা টাইপে স্বয়ংক্রিয় বা ইম্প্লিসিট রূপান্তর `(যেমন স্ট্রিং থেকে নাম্বার)`, যা সাধারণত `+ বা ==` অপারেটরের সাথে ঘটে।
 
 ---
+
+## Q9. Difference between `typeof` and `instanceof`.
+
+**Answer:** `typeof` returns a string indicating the primitive type of a variable. `instanceof` checks if an object is an instance of a specific constructor or class (prototype chain check).
+
+**Example:**
+
+```javascript
+console.log(typeof []); // "object"
+console.log([] instanceof Array); // true
+console.log([] instanceof Object); // true
+console.log(typeof null); // "object" (bug)
+```
+
+## Q9 (বাংলা): `typeof` এবং `instanceof`-এর মধ্যে পার্থক্য কী?
+
+**উত্তর:** `typeof` একটি ভেরিয়েবলের প্রিমিটিভ টাইপ নির্দেশক স্ট্রিং রিটার্ন করে। `instanceof` চেক করে একটি অবজেক্ট নির্দিষ্ট কনস্ট্রাক্টর বা ক্লাসের ইনস্ট্যান্স কিনা (প্রোটোটাইপ চেইন চেক)।
+
+---
+
+## Q10. What is `NaN` and how to check if a value is `NaN`?
+
+**Answer:** NaN (Not-a-Number) is a numeric value that represents an invalid number. It is the only value in JavaScript that is not equal to itself. Use `Number.isNaN()` (ES6) or `isNaN()` (with caution) to check.
+
+**Example:**
+
+```javascript
+console.log(0 / 0); // NaN
+console.log(parseInt("abc")); // NaN
+console.log(NaN === NaN); // false
+console.log(Number.isNaN(NaN)); // true
+console.log(isNaN("abc")); // true (coerces to number first)
+```
+
+## Q10 (বাংলা): NaN কী এবং কীভাবে একটি মান NaN কিনা চেক করবে?
+
+**উত্তর:** NaN (Not-a-Number) একটি সংখ্যাসূচক মান যা একটি অবৈধ সংখ্যা নির্দেশ করে। জাভাস্ক্রিপ্টে এটি একমাত্র মান যা নিজের সমান নয়। চেক করতে `Number.isNaN()` (ES6) বা `isNaN()` (সতর্কতার সাথে) ব্যবহার কর।
+
+---
+
+## Q11. What are `arrow functions` and how are they different from `regular functions`?
+
+**Answer:** Arrow functions (`() => {}`) are a shorter syntax. They don't have their own `this`, `arguments`, `super`, or `new.target`. They cannot be used as constructors. `this` is lexically bound (inherits from the surrounding scope).
+
+**Example:**
+
+```javascript
+const regular = function () {
+  console.log(this);
+};
+const arrow = () => {
+  console.log(this);
+};
+
+const obj = { name: "test" };
+regular.call(obj); // { name: 'test' }
+arrow.call(obj); // window/global (lexical this)
+```
+
+## Q11 (বাংলা): `অ্যারো ফাংশন` কী এবং `রেগুলার ফাংশন` থেকে কীভাবে আলাদা?
+
+**উত্তর:** অ্যারো ফাংশন (`() => {}`) একটি ছোট সিনট্যাক্স। তাদের নিজস্ব `this`, `arguments`, `super`, বা `new.target` নেই। এগুলি কনস্ট্রাক্টর হিসেবে ব্যবহার করা যায় না। `this` লেক্সিক্যালি বাউন্ড হয় (পার্শ্ববর্তী স্কোপ থেকে উত্তরাধিকারসূত্রে প্রাপ্ত)।
+
+---
+
+## Q12. Explain function declaration vs function expression.
+
+**Answer:** Function declarations are hoisted (can be called before declaration). Function expressions are not hoisted (only the variable declaration is hoisted, not the assignment).
+
+**Example:**
+
+```javascript
+// Function Declaration (hoisted)
+sayHello(); // "Hello"
+function sayHello() {
+  console.log("Hello");
+}
+
+// Function Expression (not hoisted)
+sayHi(); // TypeError: sayHi is not a function
+var sayHi = function () {
+  console.log("Hi");
+};
+```
+
+## Q12 (বাংলা): ফাংশন ডিক্লেয়ারেশন এবং ফাংশন এক্সপ্রেশনের মধ্যে পার্থক্য ব্যাখ্যা কর।
+
+**উত্তর:** ফাংশন ডিক্লেয়ারেশন হোইস্টেড হয় (ডিক্লেয়ারেশনের আগে কল করা যায়)। ফাংশন এক্সপ্রেশন হোইস্টেড হয় না (শুধু ভেরিয়েবল ডিক্লেয়ারেশন হোস্টেড হয়, অ্যাসাইনমেন্ট নয়)।
+
+---
+
+## Q13. What is the difference between `call`, `apply`, and `bind`?
+
+**Answer:** All three change the `this` context. `call` invokes the function with arguments passed individually. `apply` invokes with arguments as an `array`. `bind` returns a new function with a bound `this` (does not invoke immediately).
+
+**Example:**
+
+```javascript
+function greet(greeting, punctuation) {
+  console.log(greeting + ", " + this.name + punctuation);
+}
+const person = { name: "John" };
+
+greet.call(person, "Hello", "!"); // Hello, John!
+greet.apply(person, ["Hi", "?"]); // Hi, John?
+const bound = greet.bind(person, "Hey");
+bound("..."); // Hey, John...
+```
+
+## Q13 (বাংলা): `call`, `apply` এবং `bind`-এর মধ্যে পার্থক্য কী?
+
+**উত্তর:** তিনটিই `this` কনটেক্সট পরিবর্তন করে। `call` ফাংশনকে পৃথক আর্গুমেন্ট সহ ইনভোক করে। `apply` আর্গুমেন্টগুলি অ্যারে হিসেবে ইনভোক করে। `bind` বাউন্ড `this` সহ একটি নতুন ফাংশন রিটার্ন করে (তাৎক্ষণিকভাবে ইনভোক করে না)
+
+---
+
+## Q14. What is a `higher-order` function?
+
+**Answer:** A higher-order function is a function that takes one or more functions as arguments, returns a function, or both. Examples: `map`, `filter`, `reduce`.
+
+**Example:**
+
+```javascript
+function higherOrder(fn) {
+  return function (x) {
+    return fn(x) * 2;
+  };
+}
+const double = higherOrder((x) => x + 1);
+console.log(double(5)); // 12
+```
+
+## Q14 (বাংলা): হাইয়ার-অর্ডার ফাংশন কী?
+
+**উত্তর:** হাইয়ার-অর্ডার ফাংশন হলো এমন একটি ফাংশন যা এক বা একাধিক ফাংশনকে আর্গুমেন্ট হিসেবে নেয়, একটি ফাংশন রিটার্ন করে, অথবা উভয়ই করে। উদাহরণ: `map`, `filter`, `reduce`।
+
+---
