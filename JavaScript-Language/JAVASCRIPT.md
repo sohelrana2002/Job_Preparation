@@ -1,5 +1,7 @@
 # JAVASCRIPT Interview Question
 
+# 1. Core Concepts & Basics
+
 ## Q1. What are the different data types in JavaScript?
 
 **Answer:** JavaScript has 8 data types: 7 primitive types `(string, number, bigint, boolean, undefined, symbol, null)` and 1 non-primitive type `(object)`. Primitives are immutable and stored by value; objects are mutable and stored by reference.
@@ -249,6 +251,8 @@ regular.call(obj); // { name: 'test' }
 arrow.call(obj); // window/global (lexical this)
 ```
 
+# 2. Functions
+
 ## Q11 (বাংলা): `অ্যারো ফাংশন` কী এবং `রেগুলার ফাংশন` থেকে কীভাবে আলাদা?
 
 **উত্তর:** অ্যারো ফাংশন (`() => {}`) একটি ছোট সিনট্যাক্স। তাদের নিজস্ব `this`, `arguments`, `super`, বা `new.target` নেই। এগুলি কনস্ট্রাক্টর হিসেবে ব্যবহার করা যায় না। `this` লেক্সিক্যালি বাউন্ড হয় (পার্শ্ববর্তী স্কোপ থেকে উত্তরাধিকারসূত্রে প্রাপ্ত)।
@@ -324,5 +328,160 @@ console.log(double(5)); // 12
 ## Q14 (বাংলা): হাইয়ার-অর্ডার ফাংশন কী?
 
 **উত্তর:** হাইয়ার-অর্ডার ফাংশন হলো এমন একটি ফাংশন যা এক বা একাধিক ফাংশনকে আর্গুমেন্ট হিসেবে নেয়, একটি ফাংশন রিটার্ন করে, অথবা উভয়ই করে। উদাহরণ: `map`, `filter`, `reduce`।
+
+---
+
+## Q15. What is a pure function?
+
+**Answer:** A pure function always returns the same output for the same input, has no side effects (does not modify external state), and does not depend on external state.
+
+**Example:**
+
+```javascript
+// Pure function
+function add(a, b) {
+  return a + b;
+}
+
+// Impure function (side effect)
+let counter = 0;
+function increment() {
+  counter++;
+
+  return counter;
+}
+```
+
+## Q15 (বাংলা): পিওর ফাংশন কী?
+
+**উত্তর:** পিওর ফাংশন সবসময় একই ইনপুটের জন্য একই আউটপুট রিটার্ন করে, কোন সাইড ইফেক্ট নেই (বাহ্যিক স্টেট পরিবর্তন করে না), এবং বাহ্যিক স্টেটের উপর নির্ভর করে না।
+
+---
+
+## Q16. Explain closures in JavaScript.
+
+**Answer:** A closure is a function that remembers and accesses variables from its outer (lexical) scope even after the outer function has finished execution. It is created when a function is defined inside another function and references the outer function's variables.
+
+**Example:**
+
+```javascript
+function outer() {
+  let count = 0;
+
+  return function inner() {
+    count++;
+    return count;
+  };
+}
+
+const counter = outer();
+console.log(counter()); // 1
+console.log(counter()); // 2 (count persists)
+```
+
+## Q16 (বাংলা): জাভাস্ক্রিপ্টে ক্লোজার ব্যাখ্যা কর।
+
+**উত্তর:** ক্লোজার হলো একটি ফাংশন যা তার বাইরের (লেক্সিক্যাল) স্কোপ থেকে ভেরিয়েবল মনে রাখে এবং অ্যাক্সেস করে, এমনকি বাইরের ফাংশনের এক্সিকিউশন শেষ হওয়ার পরেও। এটি তৈরি হয় যখন একটি ফাংশন অন্য ফাংশনের ভিতরে ডিফাইন করা হয় এবং বাইরের ফাংশনের ভেরিয়েবল রেফারেন্স করে।
+
+---
+
+## Q17. What is a callback function?
+
+**Answer:** A callback function is a function passed as an argument to another function, to be executed later (often after an asynchronous operation completes).
+
+**Example:**
+
+```javascript
+function fetchData(callback) {
+  setTimeout(() => {
+    callback("Data received");
+  }, 1000);
+}
+
+fetchData((data) => {
+  console.log(data); //"Data received" after 1s
+});
+```
+
+## Q17 (বাংলা): কলব্যাক ফাংশন কী?
+
+**উত্তর:** কলব্যাক ফাংশন হলো একটি ফাংশন যা অন্য ফাংশনে আর্গুমেন্ট হিসেবে পাস করা হয়, পরে এক্সিকিউট করার জন্য (প্রায়শই অ্যাসিঙ্ক্রোনাস অপারেশন শেষ হওয়ার পর)।
+
+---
+
+## Q18. Explain currying in JavaScript.
+
+**Answer:** Currying is transforming a function that takes multiple arguments into a sequence of functions, each taking a single argument.
+
+**Example:**
+
+```javascript
+// Normal function
+function add(a, b, c) {
+  return a + b + c;
+}
+
+// Curried function
+function curriedAdd(a) {
+  return function (b) {
+    return function (c) {
+      return a + b + c;
+    };
+  };
+}
+
+console.log(curriedAdd(1)(2)(3)); // 6
+```
+
+## Q18 (বাংলা): জাভাস্ক্রিপ্টে কারিিং ব্যাখ্যা কর।
+
+**উত্তর:** কারিিং হলো এমন একটি প্রক্রিয়া যা একাধিক আর্গুমেন্ট নেওয়া একটি ফাংশনকে এমন ফাংশনের ক্রমে রূপান্তরিত করে, যেখানে প্রতিটি ফাংশন একটি করে আর্গুমেন্ট নেয়।
+
+---
+
+## Q19. What is recursion? Give an example.
+
+**Answer:** Recursion is a technique where a function calls itself to solve a problem by breaking it down into smaller sub-problems. It requires a base case to stop the recursion.
+
+**Example:**
+
+```javascript
+function factorial(n) {
+  if (n <= 1) {
+    return 1; // Base case
+  }
+
+  return n * factorial(n - 1); //Recursive call
+}
+
+console.log(factorial(5)); // 120
+```
+
+## Q19 (বাংলা): রিকারশন কী? একটি উদাহরণ দাও।
+
+**উত্তর:** রিকারশন হলো একটি কৌশল যেখানে একটি ফাংশন নিজেকে কল করে একটি সমস্যা সমাধান করে, সমস্যাটিকে ছোট উপ-সমস্যায় ভেঙে। এটি থামার জন্য একটি বেস কেস প্রয়োজন।
+
+---
+
+## Q20. Explain the difference between synchronous and asynchronous functions.
+
+**Answer:** Synchronous functions execute sequentially; each operation blocks until completion. Asynchronous functions allow other operations to run while waiting for tasks (like I/O) to complete, using callbacks, Promises, or async/await.
+
+**Example:**
+
+```javascript
+// Synchronous
+console.log("Start");
+console.log("End"); // Start, End
+
+// Asynchronous
+console.log("Start");
+setTimeout(() => console.log("Async"), 0);
+console.log("End"); // Start, End, Async
+```
+
+## Q20 (বাংলা): সিঙ্ক্রোনাস এবং অ্যাসিঙ্ক্রোনাস ফাংশনের মধ্যে পার্থক্য ব্যাখ্যা কর।
+
+**উত্তর:** সিঙ্ক্রোনাস ফাংশন ক্রমান্বয়ে এক্সিকিউট করে; প্রতিটি অপারেশন সম্পূর্ণ না হওয়া পর্যন্ত ব্লক করে। অ্যাসিঙ্ক্রোনাস ফাংশন অন্যান্য অপারেশন চলতে দেয় যখন কাজ (যেমন I/O) সম্পূর্ণ হওয়ার জন্য অপেক্ষা করে, কলব্যাক, প্রমিজ বা async/await ব্যবহার করে।
 
 ---
