@@ -485,3 +485,238 @@ console.log("End"); // Start, End, Async
 **উত্তর:** সিঙ্ক্রোনাস ফাংশন ক্রমান্বয়ে এক্সিকিউট করে; প্রতিটি অপারেশন সম্পূর্ণ না হওয়া পর্যন্ত ব্লক করে। অ্যাসিঙ্ক্রোনাস ফাংশন অন্যান্য অপারেশন চলতে দেয় যখন কাজ (যেমন I/O) সম্পূর্ণ হওয়ার জন্য অপেক্ষা করে, কলব্যাক, প্রমিজ বা async/await ব্যবহার করে।
 
 ---
+
+# 3. Scope & Execution Context
+
+## Q21. What is the difference between global and local scope?
+
+**Answer:** Global scope refers to variables declared outside any function, accessible everywhere. Local scope refers to variables declared inside a function, accessible only within that function.
+
+**Example:**
+
+```javascript
+const globalVar = "I am global";
+function test() {
+  const localVar = "I am local";
+  console.log(globalVar); // accessible
+}
+test();
+console.log(localVar); // ReferenceError
+```
+
+## Q21 (বাংলা): গ্লোবাল এবং লোকাল স্কোপের মধ্যে পার্থক্য কী?
+
+**উত্তর:** গ্লোবাল স্কোপ বলতে কোনো ফাংশনের বাইরে ডিক্লেয়ার করা ভেরিয়েবল বোঝায়, যা সর্বত্র অ্যাক্সেসযোগ্য। লোকাল স্কোপ বলতে ফাংশনের ভিতরে ডিক্লেয়ার করা ভেরিয়েবল বোঝায়, যা শুধু ঐ ফাংশনের ভিতরে অ্যাক্সেসযোগ্য।
+
+---
+
+## Q22. Explain block scope.
+
+**Answer:** Block scope restricts variable access to the block (`{}`) where it is declared. `let` and `const` are block-scoped. `var` is not block-scoped.
+
+**Example:**
+
+```javascript
+if (true) {
+  let x = 10;
+  var y = 20;
+}
+console.log(y); // 20
+console.log(x); // ReferenceError
+```
+
+## Q22 (বাংলা): ব্লক স্কোপ ব্যাখ্যা কর।
+
+**উত্তর:** ব্লক স্কোপ ভেরিয়েবল অ্যাক্সেসকে সেই ব্লক (`{}`) এর মধ্যে সীমাবদ্ধ করে যেখানে এটি ডিক্লেয়ার করা হয়। `let` এবং `const` ব্লক-স্কোপড। `var` ব্লক-স্কোপড নয়।
+
+---
+
+## Q23. What is the difference between lexical scope and dynamic scope?
+
+**Answer:** Lexical scope (static scope) is determined by where variables are defined in the source code. Dynamic scope is determined by the call stack at runtime. JavaScript uses lexical scope.
+
+**Example:**
+
+```javascript
+let x = "global";
+function outer() {
+  let x = "outer";
+  function inner() {
+    console.log(x); // 'outer' (lexical - looks at definition)
+  }
+  inner();
+}
+outer();
+
+console.log(x); // global
+```
+
+## Q23 (বাংলা): লেক্সিক্যাল স্কোপ এবং ডায়নামিক স্কোপের মধ্যে পার্থক্য কী?
+
+**উত্তর:** লেক্সিক্যাল স্কোপ (স্ট্যাটিক স্কোপ) নির্ধারিত হয় সোর্স কোডে ভেরিয়েবল কোথায় ডিফাইন করা হয়েছে তার দ্বারা। ডায়নামিক স্কোপ নির্ধারিত হয় রানটাইমে কল স্ট্যাক দ্বারা। জাভাস্ক্রিপ্ট লেক্সিক্যাল স্কোপ ব্যবহার করে।
+
+---
+
+## Q24. What is an execution context?
+
+**Answer:** An execution context is an abstract environment containing information about the code being executed, including the variable environment, scope chain, and this value. There are three types: global, function, and eval.
+
+**Example:** When a function is called, a new execution context is created and pushed onto the call stack.
+
+```javascript
+function example() {
+  // Each call creates a new execution context
+  console.log("Executing");
+}
+example();
+```
+
+## Q24 (বাংলা): এক্সিকিউশন কনটেক্সট কী?
+
+**উত্তর:** এক্সিকিউশন কনটেক্সট হলো একটি অ্যাবস্ট্রাক্ট এনভায়রনমেন্ট যা এক্সিকিউট করা কোড সম্পর্কিত তথ্য ধারণ করে, যেমন ভেরিয়েবল এনভায়রনমেন্ট, স্কোপ চেইন এবং this মান। তিন ধরনের: গ্লোবাল, ফাংশন এবং eval।
+
+**উদাহরণ**: যখন একটি ফাংশন কল করা হয়, একটি নতুন এক্সিকিউশন কনটেক্সট তৈরি হয় এবং কল স্ট্যাকে পুশ করা হয়।
+
+---
+
+## Q25. Explain the call stack in JavaScript.
+
+**Answer:** The call stack is a data structure that tracks function calls. When a function is called, it's pushed onto the stack. When it returns, it's popped off. JavaScript is single-threaded, so it has one call stack.
+
+**Example:**
+
+```javascript
+function first() {
+  second();
+}
+function second() {
+  third();
+}
+function third() {
+  console.log("Done");
+}
+first(); // Stack: first -> second -> third
+```
+
+## Q25 (বাংলা): জাভাস্ক্রিপ্টে কল স্ট্যাক ব্যাখ্যা কর।
+
+**উত্তর:** কল স্ট্যাক একটি ডেটা স্ট্রাকচার যা ফাংশন কল ট্র্যাক করে। যখন একটি ফাংশন কল হয়, এটি স্ট্যাকে পুশ হয়। যখন এটি রিটার্ন করে, এটি পপ হয়। জাভাস্ক্রিপ্ট সিঙ্গেল-থ্রেডেড, তাই এটির একটি কল স্ট্যাক আছে।
+
+---
+
+## Q26. How does JavaScript handle variable shadowing?
+
+**Answer:** Variable shadowing occurs when a variable declared in an inner scope has the same name as a variable in an outer scope. The inner variable "shadows" the outer one, making the outer variable inaccessible in the inner scope.
+
+**Example:**
+
+```javascript
+let x = "outer";
+function test() {
+  let x = "inner";
+  console.log(x); // 'inner' (shadows outer)
+}
+test();
+console.log(x); // 'outer'
+```
+
+## Q26 (বাংলা): জাভাস্ক্রিপ্ট কীভাবে ভেরিয়েবল শ্যাডোয়িং হ্যান্ডেল করে?
+
+**উত্তর:** ভেরিয়েবল শ্যাডোয়িং ঘটে যখন একটি ইনার স্কোপে ডিক্লেয়ার করা ভেরিয়েবলের নাম বাইরের স্কোপের ভেরিয়েবলের মতো হয়। ইনার ভেরিয়েবল বাইরেরটিকে "শ্যাডো" করে, ফলে বাইরের ভেরিয়েবল ইনার স্কোপে অ্যাক্সেসযোগ্য হয় না।
+
+---
+
+## Q27. What is the Temporal Dead Zone (TDZ)?
+
+**Answer:** The `TDZ` is the period between entering a scope and the actual declaration of a `let` or `const` variable. During this period, accessing the variable throws a `ReferenceError`. This prevents accessing variables before they are initialized.
+
+**Example:**
+
+```javascript
+console.log(a); // ReferenceError (TDZ)
+let a = 5;
+```
+
+## Q27 (বাংলা): টেম্পোরাল ডেড জোন (TDZ) কী?
+
+**উত্তর:** `TDZ` হলো একটি স্কোপে প্রবেশ করা এবং `let` বা `const` ভেরিয়েবলের প্রকৃত ডিক্লেয়ারেশনের মধ্যে সময়কাল। এই সময়কালে ভেরিয়েবল অ্যাক্সেস করলে `ReferenceError` হয়। এটি ভেরিয়েবল ইনিশিয়ালাইজ করার আগে অ্যাক্সেস করা প্রতিরোধ করে।
+
+---
+
+## Q28. What is the scope chain?
+
+**Answer:** The scope chain is the hierarchical chain of scopes that JavaScript uses to resolve variable names. When a variable is accessed, JavaScript looks in the current scope, then the outer scope, and so on, up to the global scope.
+
+**Example:**
+
+```javascript
+let global = "global";
+function outer() {
+  let outerVar = "outer";
+  function inner() {
+    let innerVar = "inner";
+    console.log(global); // finds in global
+    console.log(outerVar); // finds in outer
+  }
+  inner();
+}
+outer();
+```
+
+## Q28 (বাংলা): স্কোপ চেইন কী?
+
+**উত্তর:** স্কোপ চেইন হলো স্কোপগুলির শ্রেণিবিন্যাসিক চেইন যা জাভাস্ক্রিপ্ট ভেরিয়েবল নাম সমাধান করতে ব্যবহার করে। যখন একটি ভেরিয়েবল অ্যাক্সেস করা হয়, জাভাস্ক্রিপ্ট বর্তমান স্কোপে, তারপর বাইরের স্কোপে এবং এভাবে গ্লোবাল স্কোপ পর্যন্ত দেখে।
+
+---
+
+## Q29. How does the `this` keyword work in different contexts?
+
+**Answer:** `this` refers to the object that is executing the current function. Its value depends on how the function is called: global context → global object (or `undefined` in strict mode), method call → the object, arrow functions → lexical `this`, constructor → new instance, `call/apply/bind` → explicitly set.
+
+**Example:**
+
+```javascript
+const obj = {
+  name: "John",
+  greet: function () {
+    console.log(this.name);
+  },
+};
+obj.greet(); // 'John' (method call)
+const greet = obj.greet;
+greet(); // undefined or window (global call)
+```
+
+## Q29 (বাংলা): বিভিন্ন কনটেক্সটে `this` কীওয়ার্ড কীভাবে কাজ করে?
+
+**উত্তর:** `this` বর্তমান ফাংশনটি এক্সিকিউট করছে এমন অবজেক্টকে নির্দেশ করে। এর মান নির্ভর করে ফাংশনটি কীভাবে কল করা হয় তার উপর: গ্লোবাল কনটেক্সট → গ্লোবাল অবজেক্ট (অথবা স্ট্রিক্ট মোডে `undefined`), মেথড কল → অবজেক্ট, অ্যারো ফাংশন → লেক্সিক্যাল `this`, কনস্ট্রাক্টর → নতুন ইনস্ট্যান্স, `call/apply/bind` → স্পষ্টভাবে সেট করা।
+
+---
+
+## Q30. What is the difference between implicit and explicit binding of `this`?
+
+**Answer:** Implicit binding occurs when `this` is determined by the calling context (e.g., `obj.method()`). Explicit binding occurs when `this` is explicitly set using `call, apply, or bind`.
+
+**Example:**
+
+```javascript
+function greet() {
+  console.log(this.name);
+}
+
+const obj1 = { name: "Sohel" };
+const obj2 = { name: "Rolex" };
+
+// Implicit
+obj1.greet = greet;
+obj1.greet(); //Sohel
+
+// Explicit
+greet.call(obj2); //Rolex
+```
+
+## Q30 (বাংলা): `this`-এর ইম্প্লিসিট এবং এক্সপ্লিসিট বাইন্ডিংয়ের মধ্যে পার্থক্য কী?
+
+**উত্তর:** ইম্প্লিসিট বাইন্ডিং ঘটে যখন `this` কলিং কনটেক্সট দ্বারা নির্ধারিত হয় (যেমন `obj.method()`)। এক্সপ্লিসিট বাইন্ডিং ঘটে যখন `this` স্পষ্টভাবে `call, apply, বা bind` ব্যবহার করে সেট করা হয়।
+
+---
