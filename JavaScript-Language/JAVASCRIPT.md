@@ -720,3 +720,154 @@ greet.call(obj2); //Rolex
 **উত্তর:** ইম্প্লিসিট বাইন্ডিং ঘটে যখন `this` কলিং কনটেক্সট দ্বারা নির্ধারিত হয় (যেমন `obj.method()`)। এক্সপ্লিসিট বাইন্ডিং ঘটে যখন `this` স্পষ্টভাবে `call, apply, বা bind` ব্যবহার করে সেট করা হয়।
 
 ---
+
+# 4. Objects & Arrays
+
+## Q31. How do you create objects in JavaScript?
+
+**Answer:** Objects can be created using object literals (`{}`), the `new` keyword with a constructor, `Object.create()`, or ES6 classes.
+
+**Example:**
+
+```javascript
+// Object literal
+const obj1 = {
+  name: "Sohel",
+};
+
+// Constructor
+const obj2 = new Object({
+  name: "Rolex",
+});
+
+// Object.create
+const proto = {
+  greet() {
+    console.log("Hello");
+  },
+};
+const obj3 = Object.create(proto);
+
+// ES6 class
+class Person {
+  constructor(name) {
+    this.name = name;
+  }
+}
+const obj4 = new Person("Sohel");
+```
+
+## Q31 (বাংলা): জাভাস্ক্রিপ্টে কীভাবে অবজেক্ট তৈরি করবে?
+
+**উত্তর:** অবজেক্ট লিটারেল (`{}`), কনস্ট্রাক্টরের সাথে `new` কীওয়ার্ড, `Object.create()`, অথবা ES6 ক্লাস ব্যবহার করে অবজেক্ট তৈরি করা যায়।
+
+---
+
+## Q32. Difference between dot notation and bracket notation.
+
+**Answer:** Dot notation (`obj.property`) is simpler and faster but requires a valid identifier. Bracket notation (`obj['property']`) allows dynamic property names and characters not valid in identifiers.
+
+**Example:**
+
+```javascript
+// Dot notation
+const obj1 = {
+  firstName: "Sohel",
+  lastName: "Rana",
+};
+console.log(obj1.firstName); // Sohel
+
+// Bracket notation
+console.log(obj1["lastName"]); // Rana
+```
+
+## Q32 (বাংলা): ডট নোটেশন এবং ব্র্যাকেট নোটেশনের মধ্যে পার্থক্য কী?
+
+**উত্তর:** ডট নোটেশন (`obj.property`) সহজ এবং দ্রুত কিন্তু বৈধ আইডেন্টিফায়ার প্রয়োজন। ব্র্যাকেট নোটেশন (`obj['property']`) ডায়নামিক প্রপার্টি নাম এবং আইডেন্টিফায়ারে অবৈধ অক্ষর অনুমোদন করে।
+
+---
+
+## Q33. How to merge two objects?
+
+**Answer:** Use `Object.assign()` or the spread operator (`...`). Both perform shallow merging; nested objects are not deeply merged.
+
+**Example:**
+
+```javascript
+const obj1 = {
+  a: 1,
+  b: 2,
+};
+
+const obj2 = {
+  b: 3,
+  c: 4,
+};
+
+const merged1 = Object.assign({}, obj1, obj2);
+console.log("merged1: ", merged1);
+// { a: 1, b: 3, c: 4 }
+
+const merged2 = {
+  ...obj1,
+  ...obj2,
+};
+console.log("merged2: ", merged2);
+// { a: 1, b: 3, c: 4 }
+```
+
+## Q33 (বাংলা): কীভাবে দুটি অবজেক্ট মার্জ করবে?
+
+**উত্তর:** `Object.assign()` বা স্প্রেড অপারেটর (`...`) ব্যবহার কর। উভয়ই শ্যালো মার্জ করে; নেস্টেড অবজেক্ট গভীরভাবে মার্জ হয় না।
+
+---
+
+## Q34. What are object destructuring and array destructuring?
+
+**Answer:** Destructuring is a syntax that extracts values from objects or arrays into distinct variables.
+
+**Example:**
+
+```javascript
+// Object destructuring
+const person = { name: "Sohel", age: 26 };
+const { name, age } = person;
+console.log(name, age); // 'Sohel' 26
+
+// Array destructuring
+const colors = ["red", "green", "blue"];
+const [first, second] = colors;
+console.log(first, second); // 'red' 'green'
+```
+
+## Q34 (বাংলা): অবজেক্ট ডিস্ট্রাকচারিং এবং অ্যারে ডিস্ট্রাকচারিং কী?
+
+**উত্তর:** ডিস্ট্রাকচারিং হলো একটি সিনট্যাক্স যা অবজেক্ট বা অ্যারে থেকে মান বের করে পৃথক ভেরিয়েবলে নেয়।
+
+---
+
+## Q35. Explain shallow copy vs deep copy.
+
+**Answer:** Shallow copy copies only the top-level properties; nested objects are copied by reference. Deep copy creates a completely independent copy of all nested objects.
+
+**Example:**
+
+```javascript
+const original = { a: 1, b: { c: 2 } };
+
+// Shallow copy
+const shallow = { ...original };
+shallow.b.c = 3;
+console.log(original.b.c); // 3 (changed)
+
+// Deep copy (using JSON)
+const deep = JSON.parse(JSON.stringify(original));
+deep.b.c = 4;
+console.log(original.b.c); // 3 (unchanged)
+```
+
+## Q35 (বাংলা): শ্যালো কপি এবং ডিপ কপির মধ্যে পার্থক্য ব্যাখ্যা কর।
+
+**উত্তর:** শ্যালো কপি শুধুমাত্র শীর্ষ-স্তরের প্রপার্টি কপি করে; নেস্টেড অবজেক্ট রেফারেন্স দ্বারা কপি হয়। ডিপ কপি সমস্ত নেস্টেড অবজেক্টের সম্পূর্ণ স্বাধীন কপি তৈরি করে।
+
+---
