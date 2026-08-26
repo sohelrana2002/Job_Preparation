@@ -871,3 +871,139 @@ console.log(original.b.c); // 3 (unchanged)
 **উত্তর:** শ্যালো কপি শুধুমাত্র শীর্ষ-স্তরের প্রপার্টি কপি করে; নেস্টেড অবজেক্ট রেফারেন্স দ্বারা কপি হয়। ডিপ কপি সমস্ত নেস্টেড অবজেক্টের সম্পূর্ণ স্বাধীন কপি তৈরি করে।
 
 ---
+
+## Q36. How to clone an object in JavaScript?
+
+**Answer:** Use the spread operator (`{...obj}`), `Object.assign({}, obj)`, `JSON.parse(JSON.stringify(obj))` (for deep clone, with limitations), or `structuredClone(obj)` (modern).
+
+**Example:**
+
+```javascript
+const obj = { a: 1, b: { c: 2 } };
+
+const clone1 = { ...obj }; // shallow
+const clone2 = Object.assign({}, obj); // shallow
+const clone3 = JSON.parse(JSON.stringify(obj)); // deep
+const clone4 = structuredClone(obj); // deep (modern)
+```
+
+## Q36 (বাংলা): জাভাস্ক্রিপ্টে কীভাবে একটি অবজেক্ট ক্লোন করবে?
+
+**উত্তর:** স্প্রেড অপারেটর (`{...obj}`), `Object.assign({}, obj)`, `JSON.parse(JSON.stringify(obj))` (ডিপ ক্লোনের জন্য, সীমাবদ্ধতা সহ), অথবা `structuredClone(obj)` (আধুনিক) ব্যবহার কর।
+
+---
+
+## Q37. What is the difference between `Object.freeze()` and `Object.seal()`?
+
+**Answer:** `Object.freeze()` prevents adding, deleting, or modifying properties. `Object.seal()` prevents adding or deleting properties but allows modifying existing properties.
+
+**Example:**
+
+```javascript
+const obj1 = { a: 1 };
+Object.freeze(obj1);
+obj1.a = 2; // fails silently (or TypeError in strict mode)
+
+const obj2 = { a: 1 };
+Object.seal(obj2);
+obj2.a = 2; // allowed
+delete obj2.a; // fails
+```
+
+## Q37 (বাংলা): `Object.freeze()` এবং `Object.seal()`-এর মধ্যে পার্থক্য কী?
+
+**উত্তর:** `Object.freeze()` প্রপার্টি যোগ, মুছে ফেলা বা পরিবর্তন করা প্রতিরোধ করে। `Object.seal()` প্রপার্টি যোগ বা মুছে ফেলা প্রতিরোধ করে কিন্তু বিদ্যমান প্রপার্টি পরিবর্তন করার অনুমতি দেয়।
+
+---
+
+## Q38. Explain object prototypes.
+
+**Answer:** Every JavaScript object has an internal `[[Prototype]]` property (accessed via `__proto__` or `Object.getPrototypeOf()`) that points to another object. This forms a prototype chain, allowing inheritance of properties and methods.
+
+**Example:**
+
+```javascript
+const parent = {
+  greet() {
+    console.log("Hello");
+  },
+};
+const child = Object.create(parent);
+child.greet(); // 'Hello' (inherited)
+console.log(Object.getPrototypeOf(child) === parent); // true
+```
+
+## Q38 (বাংলা): অবজেক্ট প্রোটোটাইপ ব্যাখ্যা কর।
+
+**উত্তর:** প্রতিটি জাভাস্ক্রিপ্ট অবজেক্টের একটি অভ্যন্তরীণ `[[Prototype]]` প্রপার্টি আছে (`__proto__` বা `Object.getPrototypeOf()` এর মাধ্যমে অ্যাক্সেসযোগ্য) যা অন্য একটি অবজেক্টের দিকে নির্দেশ করে। এটি একটি প্রোটোটাইপ চেইন গঠন করে, যা প্রপার্টি এবং মেথডের ইনহেরিটেন্স অনুমোদন করে।
+
+---
+
+## Q39. What is prototypal inheritance?
+
+**Answer:** Prototypal inheritance is a mechanism where an object can inherit properties and methods from another object through the prototype chain. JavaScript uses prototypal inheritance instead of classical inheritance.
+
+**Example:**
+
+```javascript
+const animal = {
+  speak() {
+    console.log("Animal speaks");
+  },
+};
+const dog = Object.create(animal);
+dog.bark = function () {
+  console.log("Woof");
+};
+dog.speak(); // 'Animal speaks' (inherited)
+dog.bark(); // 'Woof'
+```
+
+## Q39 (বাংলা): প্রোটোটাইপাল ইনহেরিটেন্স কী?
+
+**উত্তর:** প্রোটোটাইপাল ইনহেরিটেন্স হলো একটি প্রক্রিয়া যেখানে একটি অবজেক্ট প্রোটোটাইপ চেইনের মাধ্যমে অন্য অবজেক্ট থেকে প্রপার্টি এবং মেথড ইনহেরিট করতে পারে। জাভাস্ক্রিপ্ট ক্লাসিক্যাল ইনহেরিটেন্সের পরিবর্তে প্রোটোটাইপাল ইনহেরিটেন্স ব্যবহার করে।
+
+---
+
+## Q40. How to check if an object has a property?
+
+**Answer:** Use `'property' in object` (checks own and inherited properties), `object.hasOwnProperty('property')` (checks own properties only), or `Object.hasOwn(object, 'property')` (ES2022).
+
+**Example:**
+
+```javascript
+const obj = { name: "John" };
+console.log("name" in obj); // true
+console.log(obj.hasOwnProperty("name")); // true
+console.log(Object.hasOwn(obj, "name")); // true
+```
+
+## Q40 (বাংলা): কীভাবে চেক করবে একটি অবজেক্টের একটি প্রপার্টি আছে?
+
+**উত্তর:** `'property' in object` (নিজের এবং ইনহেরিটেড উভয় প্রপার্টি চেক করে), `object.hasOwnProperty('property')` (শুধু নিজের প্রপার্টি চেক করে), অথবা `Object.hasOwn(object, 'property')` (ES2022) ব্যবহার কর।
+
+---
+
+## Q41. Difference between forEach and map.
+
+**Answer:** `forEach` iterates over an array, executing a function for each element; it returns `undefined`. `map` iterates and returns a new array with the results of calling a function on each element.
+
+**Example:**
+
+```javascript
+const arr = [1, 2, 3];
+
+// forEach (returns undefined)
+const result1 = arr.forEach((x) => x * 2);
+console.log(result1); // undefined
+
+// map (returns new array)
+const result2 = arr.map((x) => x * 2);
+console.log(result2); // [2, 4, 6]
+```
+
+## Q41 (বাংলা): `forEach` এবং `map`-এর মধ্যে পার্থক্য কী?
+
+**উত্তর:** `forEach` একটি অ্যারের উপর পুনরাবৃত্তি করে, প্রতিটি উপাদানের জন্য একটি ফাংশন এক্সিকিউট করে; এটি `undefined` রিটার্ন করে। `map` পুনরাবৃত্তি করে এবং প্রতিটি উপাদানে ফাংশন কলের ফলাফল সহ একটি নতুন অ্যারে রিটার্ন করে।
+
+---
