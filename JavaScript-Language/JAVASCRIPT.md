@@ -1007,3 +1007,75 @@ console.log(result2); // [2, 4, 6]
 **উত্তর:** `forEach` একটি অ্যারের উপর পুনরাবৃত্তি করে, প্রতিটি উপাদানের জন্য একটি ফাংশন এক্সিকিউট করে; এটি `undefined` রিটার্ন করে। `map` পুনরাবৃত্তি করে এবং প্রতিটি উপাদানে ফাংশন কলের ফলাফল সহ একটি নতুন অ্যারে রিটার্ন করে।
 
 ---
+
+## Q42. How does `reduce` work?
+
+**Answer:** `reduce` applies a reducer function to each element of an array, accumulating a single result. It takes a callback (accumulator, currentValue) and an optional initial value.
+
+**Example:**
+
+```javascript
+const arr = [1, 2, 3, 4];
+
+const sum = arr.reduce((acc, currVal) => {
+  return acc + curVal;
+}, 0);
+console.log("Sum: ", sum); //10
+
+// Without initial value (uses first element as accumulator)
+const product = arr.reduce((acc, currVal) => {
+  return acc * curVal;
+});
+console.log("Product: ", product); //24
+```
+
+## Q42 (বাংলা): `reduce` কীভাবে কাজ করে?
+
+**উত্তর:** `reduce` একটি অ্যারের প্রতিটি উপাদানে একটি রিডিউসার ফাংশন প্রয়োগ করে, একটি একক ফলাফল সংগ্রহ করে। এটি একটি কলব্যাক (accumulator, currentValue) এবং একটি ঐচ্ছিক প্রাথমিক মান নেয়।
+
+---
+
+## Q43. Difference between `slice` and `splice`.
+
+**Answer:** `slice(start, end)` returns a new array (shallow copy) of selected elements without modifying the original. `splice(start, deleteCount, ...items)` modifies the original array by removing, replacing, or adding elements.
+
+**Example:**
+
+```javascript
+const arr = [1, 2, 3, 4, 5];
+const sliced = arr.slice(1, 3);
+console.log(sliced); // [2, 3]
+console.log(arr); // [1, 2, 3, 4, 5] (unchanged)
+
+const spliced = arr.splice(1, 2, "a", "b");
+console.log(spliced); // [2, 3]
+console.log(arr); // [1, 'a', 'b', 4, 5] (modified)
+```
+
+## Q43 (বাংলা): `slice` এবং `splice`-এর মধ্যে পার্থক্য কী?
+
+**উত্তর:** `slice(start, end)` মূল অ্যারে পরিবর্তন না করেই নির্বাচিত উপাদানের একটি নতুন অ্যারে (শ্যালো কপি) রিটার্ন করে। `splice(start, deleteCount, ...items)` উপাদান সরিয়ে, প্রতিস্থাপন করে বা যোগ করে মূল অ্যারে পরিবর্তন করে।
+
+---
+
+## Q44. What is the difference between `find` and `filter`?
+
+**Answer:** `find` returns the first element that satisfies the condition (or `undefined`). `filter` returns a new array with all elements that satisfy the condition.
+
+**Example:**
+
+```javascript
+const arr = [1, 2, 3, 4, 5];
+
+const found = arr.find((x) => x > 3);
+console.log(found); //4
+
+const filtered = arr.filter((x) => x > 3);
+console.log(filtered); // [4, 5]
+```
+
+## Q44 (বাংলা): `find` এবং `filter`-এর মধ্যে পার্থক্য কী?
+
+**উত্তর:** `find` শর্ত পূরণ করে এমন প্রথম উপাদান রিটার্ন করে (অথবা `undefined`)। `filter` শর্ত পূরণ করে এমন সমস্ত উপাদান সহ একটি নতুন অ্যারে রিটার্ন করে।
+
+---
