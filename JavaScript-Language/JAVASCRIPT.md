@@ -1079,3 +1079,133 @@ console.log(filtered); // [4, 5]
 **উত্তর:** `find` শর্ত পূরণ করে এমন প্রথম উপাদান রিটার্ন করে (অথবা `undefined`)। `filter` শর্ত পূরণ করে এমন সমস্ত উপাদান সহ একটি নতুন অ্যারে রিটার্ন করে।
 
 ---
+
+## Q45. How does `some` differ from `every`?
+
+**Answer:** `some` returns `true` if at least one element satisfies the condition. `every` returns `true` only if all elements satisfy the condition.
+
+**Example:**
+
+```javascript
+const arr = [1, 2, 3];
+console.log(arr.some((x) => x > 2)); // true (3 > 2)
+console.log(arr.every((x) => x > 2)); // false (1, 2 not > 2)
+```
+
+## Q45 (বাংলা): `some` কীভাবে `every` থেকে আলাদা?
+
+**উত্তর:** `some` রিটার্ন করে `true` যদি কমপক্ষে একটি উপাদান শর্ত পূরণ করে। `every` রিটার্ন করে `true` শুধুমাত্র যদি সমস্ত উপাদান শর্ত পূরণ করে।
+
+---
+
+## Q46. How to flatten an `array`?
+
+**Answer:** Use `Array.prototype.flat()` (ES2019) or `reduce` with `concat` for older environments. `flat()` takes a depth parameter (default 1).
+
+**Example:**
+
+```javascript
+const nested = [1, [2, [3, [4]]]];
+console.log(nested.flat()); // [1, 2, [3, [4]]]
+console.log(nested.flat(2)); // [1, 2, 3, [4]]
+console.log(nested.flat(Infinity)); // [1, 2, 3, 4]
+```
+
+## Q46 (বাংলা): কীভাবে একটি অ্যারে ফ্ল্যাট করবে?
+
+**উত্তর:** `Array.prototype.flat()` (ES2019) বা পুরনো পরিবেশের জন্য `reduce` সাথে `concat` ব্যবহার কর। `flat()` একটি ডেপথ প্যারামিটার নেয় (ডিফল্ট 1)।
+
+---
+
+## Q47. How to remove duplicates from an `array`?
+
+**Answer:** Use `Set` (most concise), `filter` with `indexOf`, or `reduce`.
+
+**Example:**
+
+```javascript
+const arr = [1, 2, 2, 3, 3, 4];
+// Using Set
+const unique1 = [...new Set(arr)]; // [1, 2, 3, 4]
+// Using filter
+const unique2 = arr.filter((item, index) => arr.indexOf(item) === index);
+// [1, 2, 3, 4]
+```
+
+## Q47 (বাংলা): কীভাবে একটি অ্যারে থেকে ডুপ্লিকেট সরাবো?
+
+**উত্তর:** `Set` (সবচেয়ে সংক্ষিপ্ত), `filter` সাথে `indexOf`, অথবা `reduce` ব্যবহার কর।
+
+---
+
+## Q48. How does `Array.from()` work?
+
+**Answer:** `Array.from()` creates a new shallow-copied Array instance from an iterable or array-like object.
+
+**Example:**
+
+```javascript
+// From a string
+console.log(Array.from("hello")); // ['h','e','l','l','o']
+// From a Set
+console.log(Array.from(new Set([1, 2, 2, 3]))); // [1,2,3]
+// With mapping function
+console.log(Array.from([1, 2, 3], (x) => x * 2)); // [2,4,6]
+```
+
+## Q48 (বাংলা): `Array.from()` কীভাবে কাজ করে?
+
+**উত্তর:** `Array.from()` একটি ইটারেবল বা অ্যারে-সদৃশ অবজেক্ট থেকে একটি নতুন শ্যালো-কপিড অ্যারে ইনস্ট্যান্স তৈরি করে।
+
+---
+
+## Q49. What is the spread operator (`...`)?
+
+**Answer:** The spread operator expands an iterable (array, string, object) into individual elements. It is used for copying, merging, and spreading elements into function arguments.
+
+**Example:**
+
+```javascript
+// Array spread
+const arr1 = [1, 2];
+const arr2 = [...arr1, 3, 4]; // [1, 2, 3, 4]
+// Object spread
+const obj1 = { a: 1 };
+const obj2 = { ...obj1, b: 2 }; // { a: 1, b: 2 }
+// Function arguments
+const numbers = [1, 2, 3];
+console.log(Math.max(...numbers)); // 3
+```
+
+## Q49 (বাংলা): স্প্রেড অপারেটর (...) কী?
+
+**উত্তর:** স্প্রেড অপারেটর একটি ইটারেবল (অ্যারে, স্ট্রিং, অবজেক্ট) কে পৃথক উপাদানে বিস্তৃত করে। এটি কপি করা, মার্জ করা এবং ফাংশন আর্গুমেন্টে উপাদান বিস্তৃত করার জন্য ব্যবহৃত হয়।
+
+---
+
+## Q50. What is the rest parameter (`...`)?
+
+**Answer:** The rest parameter collects remaining arguments into an array. It is used in function definitions to handle variable numbers of arguments.
+
+**Example:**
+
+```javascript
+function sum(...numbers) {
+  return numbers.reduce((acc, curr) => acc + curr, 0);
+}
+console.log(sum(1, 2, 3, 4)); // 10
+
+// With other parameters
+function log(prefix, ...messages) {
+  messages.forEach((msg) => console.log(prefix, msg));
+}
+log("Error:", "File not found", "Permission denied");
+// Error: File not found
+// Error: Permission denied
+```
+
+## Q50 (বাংলা): রেস্ট প্যারামিটার (`...`) কী?
+
+**উত্তর:** রেস্ট প্যারামিটার অবশিষ্ট আর্গুমেন্টগুলো একটি অ্যারেতে সংগ্রহ করে। এটি ফাংশন ডেফিনেশনে পরিবর্তনশীল সংখ্যক আর্গুমেন্ট হ্যান্ডেল করতে ব্যবহৃত হয়।
+
+---
