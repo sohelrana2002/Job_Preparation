@@ -1209,3 +1209,62 @@ log("Error:", "File not found", "Permission denied");
 **উত্তর:** রেস্ট প্যারামিটার অবশিষ্ট আর্গুমেন্টগুলো একটি অ্যারেতে সংগ্রহ করে। এটি ফাংশন ডেফিনেশনে পরিবর্তনশীল সংখ্যক আর্গুমেন্ট হ্যান্ডেল করতে ব্যবহৃত হয়।
 
 ---
+
+# 5. Asynchronous JavaScript
+
+## Q51. Can you explain the event loop?
+
+**Answer:** The event loop is a mechanism that allows JavaScript to perform non-blocking I/O operations. It continuously checks the call stack and the task queue. If the call stack is empty, it takes the first task from the queue and pushes it onto the stack.
+
+**Example:**
+
+```javascript
+console.log("Start");
+setTimeout(() => console.log("Timeout"), 0);
+Promise.resolve().then(() => console.log("Promise"));
+console.log("End");
+// Output: Start, End, Promise, Timeout
+// (Microtasks like Promise run before macrotasks like setTimeout)
+```
+
+## Q51 (বাংলা): ইভেন্ট লুপ ব্যাখ্যা করতে পারো?
+
+**উত্তর:** ইভেন্ট লুপ হলো একটি প্রক্রিয়া যা জাভাস্ক্রিপ্টকে নন-ব্লকিং I/O অপারেশন করতে দেয়। এটি ক্রমাগত কল স্ট্যাক এবং টাস্ক কিউ চেক করে। যদি কল স্ট্যাক খালি থাকে, এটি কিউ থেকে প্রথম টাস্ক নিয়ে স্ট্যাকে পুশ করে।
+
+---
+
+## Q52. What's the difference between microtasks and macrotasks?
+
+**Answer:** Microtasks (e.g., Promise callbacks, `queueMicrotask`) have higher priority and are executed before macrotasks (e.g., `setTimeout`, `setInterval`, I/O). Microtasks are processed after each macrotask, before the next macrotask.
+
+**Example:**
+
+```javascript
+setTimeout(() => console.log("Macro"), 0);
+Promise.resolve().then(() => console.log("Micro"));
+// Output: Micro, Macro
+```
+
+## Q52 (বাংলা): মাইক্রোটাস্ক এবং ম্যাক্রোটাস্কের মধ্যে পার্থক্য কী?
+
+**উত্তর:** মাইক্রোটাস্ক (যেমন Promise কলব্যাক, `queueMicrotask`)-এর উচ্চ অগ্রাধিকার রয়েছে এবং ম্যাক্রোটাস্কের (যেমন `setTimeout`, `setInterval`, I/O) আগে এক্সিকিউট হয়। প্রতিটি ম্যাক্রোটাস্কের পরে, পরবর্তী ম্যাক্রোটাস্কের আগে মাইক্রোটাস্ক প্রক্রিয়া করা হয়।
+
+---
+
+## Q53. Why does `Promise.resolve()` execute before `setTimeout(0)`?
+
+**Answer:** Because `Promise` callbacks are microtasks, which have priority over macrotasks like `setTimeout`. After each macrotask, the event loop processes all pending microtasks before the next macrotask.
+
+**Example:**
+
+```javascript
+setTimeout(() => console.log("Timeout"), 0);
+Promise.resolve().then(() => console.log("Promise"));
+// Output: Promise, Timeout
+```
+
+## Q53 (বাংলা): কেন `Promise.resolve()` `setTimeout(0)`-এর আগে এক্সিকিউট হয়?
+
+**উত্তর:** কারণ `Promise` কলব্যাকগুলি মাইক্রোটাস্ক, যেগুলির অগ্রাধিকার `setTimeout`-এর মতো ম্যাক্রোটাস্কের চেয়ে বেশি। প্রতিটি ম্যাক্রোটাস্কের পরে, ইভেন্ট লুপ পরবর্তী ম্যাক্রোটাস্কের আগে সমস্ত পেন্ডিং মাইক্রোটাস্ক প্রক্রিয়া করে।
+
+---
