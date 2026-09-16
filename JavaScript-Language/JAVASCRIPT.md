@@ -1268,3 +1268,23 @@ Promise.resolve().then(() => console.log("Promise"));
 **উত্তর:** কারণ `Promise` কলব্যাকগুলি মাইক্রোটাস্ক, যেগুলির অগ্রাধিকার `setTimeout`-এর মতো ম্যাক্রোটাস্কের চেয়ে বেশি। প্রতিটি ম্যাক্রোটাস্কের পরে, ইভেন্ট লুপ পরবর্তী ম্যাক্রোটাস্কের আগে সমস্ত পেন্ডিং মাইক্রোটাস্ক প্রক্রিয়া করে।
 
 ---
+
+## Q54. How would this behavior change in a Node.js environment versus a browser?
+
+**Answer:** Both use the event loop but Node.js has additional phases (timers, I/O, idle, poll, check, close) and microtask processing occurs between each phase. Browsers have a simpler event loop focused on rendering and user interactions.
+
+**Example:** In Node.js, `setImmediate` runs in the check phase, while `setTimeout(0)` runs in the timers phase. Their order can vary depending on when the event loop enters each phase.
+
+```javascript
+// Node.js
+setTimeout(() => console.log("Timeout"), 0);
+setImmediate(() => console.log("Immediate"));
+// Order can vary
+// Output: Immediate, Timeout
+```
+
+## Q54 (বাংলা): Node.js পরিবেশে এবং ব্রাউজারে এই আচরণ কীভাবে পরিবর্তিত হবে?
+
+**উত্তর:** উভয়ই ইভেন্ট লুপ ব্যবহার করে তবে Node.js-এর অতিরিক্ত ফেজ রয়েছে (timers, I/O, idle, poll, check, close) এবং প্রতিটি ফেজের মধ্যে মাইক্রোটাস্ক প্রক্রিয়া করা হয়। ব্রাউজারগুলির একটি সরল ইভেন্ট লুপ রয়েছে যা রেন্ডারিং এবং ব্যবহারকারীর ইন্টারঅ্যাকশনের উপর দৃষ্টি নিবদ্ধ করে।
+
+---
