@@ -800,3 +800,247 @@ Prisma একটি ORM। এতে schema ফাইলে মডেল লি�
 Improvement = ((5 - 3.5) / 5) × 100 = 30%
 
 **মনে রাখবে:** এগুলো Performance Optimization-এর সাধারণ পদ্ধতি। তোমার বাস্তব অভিজ্ঞতায় যেগুলো করেছিলে, শুধু সেগুলোই নিজের কাজ হিসেবে বলবে।
+
+
+# মক শর্ট টেস্ট – নমুনা সমাধান
+
+> আগে নিজে চেষ্টা করো, তারপর এই ফাইল দেখো। এটি একটি সম্ভাব্য সমাধান, একমাত্র নয়।
+
+---
+
+## পার্ট গ: JS লজিক ফাংশন
+
+```js
+// ১. স্ট্রিং উল্টানো
+export function reverseString(str) {
+  return str.split("").reverse().join("");
+}
+
+// ২. ডুপ্লিকেট বাদ
+export function removeDuplicates(arr) {
+  return [...new Set(arr)];
+}
+
+// ৩. cart-এর মোট দাম
+export function cartTotal(cart) {
+  const total = cart.reduce((sum, item) => sum + item.price * item.qty, 0);
+  return Number(total.toFixed(2));
+}
+
+// ৪. ক্যাটাগরি অনুযায়ী গণনা
+export function countByCategory(products) {
+  return products.reduce((acc, p) => {
+    acc[p.category] = (acc[p.category] || 0) + 1;
+    return acc;
+  }, {});
+}
+
+// ৫. দ্বিতীয় সর্বোচ্চ ভিন্ন মান
+export function secondHighest(arr) {
+  const unique = [...new Set(arr)].sort((a, b) => b - a);
+  return unique.length >= 2 ? unique[1] : null;
+}
+```
+
+**ব্যাখ্যা (ভাইভার জন্য):**
+- `Set` শুধু অনন্য মান রাখে, তাই ডুপ্লিকেট বাদ দিতে সুবিধা।
+- `reduce` দিয়ে একটি অ্যারে থেকে একটি মান (যোগফল বা অবজেক্ট) বানানো যায়।
+- `toFixed(2)` স্ট্রিং দেয়, তাই `Number()` দিয়ে সংখ্যায় ফিরিয়েছি। ভাসমান সংখ্যার ছোট ভুল (যেমন `0.1 + 0.2`) এড়াতে এটি কাজে লাগে।
+
+---
+
+## পার্ট ক, খ, গ: UI + API + Cart (একটি কম্পোনেন্ট)
+
+Next.js (App Router) হলে ফাইলের উপরে `"use client"` লাগবে। React (Vite) হলে লাগবে না।
+
+```jsx
+"use client";
+import { useEffect, useMemo, useState } from "react";
+
+const API = "https://fakestoreapi.com";
+
+export default function ProductPage() {
+  const [products, setProducts] = useState([]);
+  const [categories, setCategories] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+
+  const [search, setSearch] = useState("");
+  const [category, setCategory] = useState("all");
+  const [cart, setCart] = useState([]);
+  const [reloadKey, setReloadKey] = useState(0);
+
+  // ডেটা আনা
+  useEffect(() => {
+    async function load() {
+      try {
+        setLoading(true);
+        setError(null);
+        const [pRes, cRes] = await Promise.all([
+          fetch(`${API}/products`),
+          fetch(`${API}/products/categories`),
+        ]);
+        if (!pRes.ok || !cRes.ok) throw new Error("ডেটা আনা যায়নি");
+        setProducts(await pRes.json());
+        setCategories(await cRes.json());
+      } catch (err) {
+        setError(err.message || "কিছু একটা ভুল হয়েছে");
+      } finally {
+        setLoading(false);
+      }
+    }
+    load();
+  }, [reloadKey]);
+
+  // ফিল্টার: সার্চ + ক্যাটাগরি একসাথে
+  const filtered = useMemo(() => {
+    return products.filter((p) => {
+      const matchCategory = category === "all" || p.category === category;
+      const matchSearch = p.title.toLowerCase().includes(search.trim().toLowerCase());
+      return matchCategory && matchSearch;
+    });
+  }, [products, search, category]);
+
+  // cart ফাংশন
+  const addToCart = (product) => {
+    setCart((prev) => {
+      const found = prev.find((i) => i.id === product.id);
+      if (found) {
+        return prev.map((i) => (i.id === product.id ? { ...i, qty: i.qty + 1 } : i));
+      }
+      return [...prev, { id: product.id, title: product.title, price: product.price, qty: 1 }];
+    });
+  };
+
+  const changeQty = (id, delta) => {
+    setCart((prev) =>
+      prev
+        .map((i) => (i.id === id ? { ...i, qty: i.qty + delta } : i))
+        .filter((i) => i.qty > 0)
+    );
+  };
+
+  const removeItem = (id) => setCart((prev) => prev.filter((i) => i.id !== id));
+
+  const itemCount = cart.reduce((sum, i) => sum + i.qty, 0);
+  const total = Number(cart.reduce((sum, i) => sum + i.price * i.qty, 0).toFixed(2));
+
+  return (
+    <div className="min-h-screen bg-gray-50">
+      {/* Navbar */}
+      <nav className="sticky top-0 z-10 flex items-center justify-between bg-white px-4 py-3 shadow">
+        <h1 className="text-xl font-bold">MyShop</h1>
+        <div className="rounded-full bg-gray-900 px-3 py-1 text-sm text-white">
+          Cart: {itemCount}
+        </div>
+      </nav>
+
+      <main className="mx-auto grid max-w-7xl gap-6 p-4 lg:grid-cols-[1fr_320px]">
+        <section>
+          {/* সার্চ ও ফিল্টার */}
+          <div className="mb-4 flex flex-col gap-3 sm:flex-row">
+            <input
+              type="text"
+              value={search}
+              onChange={(e) => setSearch(e.target.value)}
+              placeholder="প্রোডাক্ট খুঁজুন..."
+              className="w-full rounded border px-3 py-2"
+            />
+            <select
+              value={category}
+              onChange={(e) => setCategory(e.target.value)}
+              className="rounded border px-3 py-2 sm:w-56"
+            >
+              <option value="all">সব ক্যাটাগরি</option>
+              {categories.map((c) => (
+                <option key={c} value={c}>{c}</option>
+              ))}
+            </select>
+          </div>
+
+          {/* loading / error / empty / list */}
+          {loading && <p className="py-10 text-center">লোড হচ্ছে...</p>}
+
+          {error && !loading && (
+            <div className="py-10 text-center">
+              <p className="mb-3 text-red-600">{error}</p>
+              <button
+                onClick={() => setReloadKey((k) => k + 1)}
+                className="rounded bg-gray-900 px-4 py-2 text-white"
+              >
+                আবার চেষ্টা করুন
+              </button>
+            </div>
+          )}
+
+          {!loading && !error && filtered.length === 0 && (
+            <p className="py-10 text-center">কোনো প্রোডাক্ট পাওয়া যায়নি</p>
+          )}
+
+          {!loading && !error && filtered.length > 0 && (
+            <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-3">
+              {filtered.map((p) => (
+                <div
+                  key={p.id}
+                  className="flex flex-col rounded-lg bg-white p-4 shadow transition hover:-translate-y-1 hover:shadow-lg"
+                >
+                  <img
+                    src={p.image}
+                    alt={p.title}
+                    className="mb-3 h-48 w-full object-contain"
+                  />
+                  <h2 className="line-clamp-2 font-semibold">{p.title}</h2>
+                  <p className="text-sm capitalize text-gray-500">{p.category}</p>
+                  <div className="mt-2 flex items-center justify-between">
+                    <span className="font-bold">${p.price}</span>
+                    <span className="text-sm">★ {p.rating?.rate}</span>
+                  </div>
+                  <button
+                    onClick={() => addToCart(p)}
+                    className="mt-auto rounded bg-gray-900 py-2 text-white"
+                  >
+                    Add to Cart
+                  </button>
+                </div>
+              ))}
+            </div>
+          )}
+        </section>
+
+        {/* Cart */}
+        <aside className="h-fit rounded-lg bg-white p-4 shadow">
+          <h2 className="mb-3 text-lg font-bold">Cart</h2>
+          {cart.length === 0 && <p className="text-sm text-gray-500">Cart খালি</p>}
+          {cart.map((i) => (
+            <div key={i.id} className="mb-3 border-b pb-3">
+              <p className="line-clamp-1 text-sm font-medium">{i.title}</p>
+              <p className="text-sm">${i.price}</p>
+              <div className="mt-1 flex items-center gap-2">
+                <button onClick={() => changeQty(i.id, -1)} className="rounded border px-2">−</button>
+                <span>{i.qty}</span>
+                <button onClick={() => changeQty(i.id, 1)} className="rounded border px-2">+</button>
+                <button onClick={() => removeItem(i.id)} className="ml-auto text-sm text-red-600">
+                  মুছুন
+                </button>
+              </div>
+            </div>
+          ))}
+          <p className="mt-3 text-right font-bold">মোট: ${total}</p>
+        </aside>
+      </main>
+    </div>
+  );
+}
+```
+
+**মূল বিষয় (ভাইভার জন্য):**
+- `useMemo` দিয়ে ফিল্টার করা তালিকা হিসাব করেছি, যাতে সার্চ ও ক্যাটাগরি একসাথে কাজ করে এবং অপ্রয়োজনীয় হিসাব না হয়।
+- `reloadKey` বদলে `useEffect` আবার চালিয়ে "আবার চেষ্টা করুন" করেছি।
+- cart-এ একই প্রোডাক্ট থাকলে `qty` বাড়াই, না থাকলে নতুন লাইন যোগ করি। `qty` ০ হলে `filter` দিয়ে বাদ দিই।
+- state সরাসরি বদলাইনি, নতুন অ্যারে বা অবজেক্ট বানিয়েছি (immutability)।
+- `key` হিসেবে `id` ব্যবহার করেছি, index নয়।
+
+**বোনাসের ইঙ্গিত:**
+- `localStorage`: cart পড়ার জন্য প্রথম render-এ `useEffect`-এ `JSON.parse(localStorage.getItem("cart"))`, আর cart বদলালে আরেকটি `useEffect`-এ `JSON.stringify` করে লেখো। Next.js-এ সার্ভারে `localStorage` নেই, তাই এটি অবশ্যই `useEffect`-এর ভেতরে করতে হবে।
+- সাজানো: `[...filtered].sort((a, b) => a.price - b.price)`, মূল অ্যারে না বদলে কপি করে।
+- Debounce: `useEffect`-এ `setTimeout` দিয়ে ৩০০ms পরে সার্চ মান বসাও, আর cleanup-এ `clearTimeout` করো।
